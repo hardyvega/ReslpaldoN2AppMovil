@@ -12,20 +12,20 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
+    files: [
+      { pattern: 'src/**/*.spec.ts', watched: true } // Incluye todos los archivos .spec.ts
+    ],
     client: {
       jasmine: {
-        // you can add configuration options for Jasmine here
-        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
-        // for example, you can disable the random execution with `random: false`
-        // or set a specific seed with `seed: 4321`
+        // Configuración adicional para Jasmine si es necesaria
       },
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false // Mantener visible el reporte de Jasmine
     },
     jasmineHtmlReporter: {
-      suppressAll: true // removes the duplicated traces
+      suppressAll: true // Remueve rastros duplicados
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/app'),
+      dir: require('path').join(__dirname, './coverage'),
       subdir: '.',
       reporters: [
         { type: 'html' },

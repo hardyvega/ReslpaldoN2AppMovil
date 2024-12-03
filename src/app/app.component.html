@@ -1,3 +1,47 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>SeniorRide</ion-title> <!-- Mantiene el nombre constante sin traducción -->
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/perfil" routerDirection="root">
+            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <ion-label>{{ 'MENU_PROFILE' | translate }}</ion-label>
+          </ion-item>
+          
+          <ion-item routerLink="/solicitar-viaje" routerDirection="root">
+            <ion-icon slot="start" name="car-outline"></ion-icon>
+            <ion-label>{{ 'MENU_REQUEST_RIDE' | translate }}</ion-label>
+          </ion-item>
+
+          <ion-item routerLink="/viajes-realizados" routerDirection="root">
+            <ion-icon slot="start" name="time-outline"></ion-icon>
+            <ion-label>{{ 'MENU_HISTORY' | translate }}</ion-label>
+          </ion-item>
+
+          <ion-item routerLink="/agendar-viaje" routerDirection="root">
+            <ion-icon slot="start" name="calendar-outline"></ion-icon>
+            <ion-label>{{ 'MENU_SCHEDULE_RIDE' | translate }}</ion-label>
+          </ion-item>
+
+          <ion-item routerLink="/configuracion" routerDirection="root">
+            <ion-icon slot="start" name="settings-outline"></ion-icon>
+            <ion-label>{{ 'MENU_SETTINGS' | translate }}</ion-label>
+          </ion-item>
+
+          <ion-item routerLink="/ayuda" routerDirection="root">
+            <ion-icon slot="start" name="help-circle-outline"></ion-icon>
+            <ion-label>{{ 'MENU_HELP' | translate }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>
