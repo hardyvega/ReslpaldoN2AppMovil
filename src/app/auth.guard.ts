@@ -9,14 +9,12 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private localStorageService: LocalStorageService) {}
 
   canActivate(): boolean {
-    // Verificar si el usuario está autenticado utilizando LocalStorageService
     const isAuthenticated = !!this.localStorageService.getItem('userToken');
-    
+
     if (!isAuthenticated) {
-      this.router.navigate(['/login']); // Redirige a la página de login si no está autenticado
+      this.router.navigate(['/login']);
       return false;
     }
-    return true; // Permite el acceso si está autenticado
+    return true;
   }
 }
-

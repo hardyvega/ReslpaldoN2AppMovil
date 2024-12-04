@@ -11,58 +11,51 @@ import { LocalStorageService } from '../services/local-storage.service';
 export class LoginPage {
   username: string = '';
   password: string = '';
+  errorMessage: string = ''; // Nueva propiedad
 
   constructor(
-    private router: Router,
+    public router: Router, // Cambiado a public
     private alertController: AlertController,
     private localStorageService: LocalStorageService
   ) {}
 
-  // Método para iniciar sesión
   async login() {
-    // Obtén la lista de usuarios guardados en localStorage
-    const users: any[] = JSON.parse(this.localStorageService.getItem('users')) || [];
+    if (!this.username || !this.password) {
+      this.errorMessage = 'Por favor, completa todos los campos.';
+      return;
+    }
 
-    // Verifica si el usuario ingresado existe en la lista y coincide la contraseña
-    const user = users.find((user: any) => user.username === this.username && user.password === this.password);
+    const users: any[] = JSON.parse(this.localStorageService.getItem('users')) || [];
+    const user = users.find(
+      (user: any) => user.username === this.username && user.password === this.password
+    );
 
     if (user) {
-      // Guarda el token de sesión (simulado) en localStorage
       this.localStorageService.setItem('userToken', 'sample-token');
-      this.router.navigate(['/home']); // Redirige al usuario a la página de inicio
+      this.router.navigate(['/home']);
     } else {
-      // Muestra una alerta de error si las credenciales no coinciden
-      const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'Usuario o contraseña incorrectos.',
-        buttons: ['OK']
-      });
-      await alert.present();
+      this.errorMessage = 'Usuario o contraseña incorrectos.';
     }
   }
 
-  // Método para recuperar la contraseña
   async recoverPassword() {
-    const alert = await this.alertController.create({
-      header: 'Recuperar Contraseña',
-      message: 'Enviaremos un enlace de recuperación a tu correo.',
-      buttons: ['OK']
-    });
-    await alert.present();
+    await this.presentAlert('Recuperar Contraseña', 'Enviaremos un enlace de recuperación a tu correo.');
   }
 
-  // Método para restablecer la contraseña
   async resetPassword() {
-    const alert = await this.alertController.create({
-      header: 'Restablecer Contraseña',
-      message: 'Por favor, contacta con el administrador para restablecer tu contraseña.',
-      buttons: ['OK']
-    });
-    await alert.present();
+    await this.presentAlert('Restablecer Contraseña', 'Por favor, contacta con el administrador.');
   }
 
-  // Método para redirigir a la página de registro
   register() {
-    this.router.navigate(['/register']); // Redirige a la página de registro
+    this.router.navigate(['/register']);
+  }
+
+  private async presentAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }

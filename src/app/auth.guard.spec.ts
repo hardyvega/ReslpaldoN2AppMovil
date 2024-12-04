@@ -1,17 +1,40 @@
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthGuard } from './auth.guard';
+import { LocalStorageService } from './services/local-storage.service';
 
-import { authGuard } from './auth.guard';
-
-describe('authGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => authGuard(...guardParameters));
+describe('AuthGuard', () => {
+  let guard: AuthGuard;
+  let mockRouter: jasmine.SpyObj<Router>;
+  let mockLocalStorageService: jasmine.SpyObj<LocalStorageService>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    mockLocalStorageService = jasmine.createSpyObj('LocalStorageService', ['getItem']);
+
+    TestBed.configureTestingModule({
+      providers: [
+        AuthGuard,
+        { provide: Router, useValue: mockRouter },
+        { provide: LocalStorageService, useValue: mockLocalStorageService },
+      ],
+    });
+
+    guard = TestBed.inject(AuthGuard);
   });
 
   it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
+    expect(guard).toBeTruthy();
+  });
+
+  it('should return true if user is authenticated', () => {
+    mockLocalStorageService.getItem.and.returnValue('sample-token');
+    expect(guard.canActivate()).toBeTrue();
+  });
+
+  it('should navigate to login if user is not authenticated', () => {
+    mockLocalStorageService.getItem.and.returnValue(null);
+    expect(guard.canActivate()).toBeFalse();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

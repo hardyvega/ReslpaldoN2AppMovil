@@ -12,33 +12,30 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
-    files: [
-      { pattern: 'src/**/*.spec.ts', watched: true } // Incluye todos los archivos .spec.ts
-    ],
     client: {
       jasmine: {
-        // Configuración adicional para Jasmine si es necesaria
+        random: false // Desactiva la aleatoriedad para que las pruebas siempre sigan el mismo orden
       },
-      clearContext: false // Mantener visible el reporte de Jasmine
+      clearContext: false // Mantener visible el reporte de Jasmine en el navegador
     },
     jasmineHtmlReporter: {
-      suppressAll: true // Remueve rastros duplicados
+      suppressAll: true // Remueve rastros duplicados en el reporte HTML
     },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage'),
       subdir: '.',
       reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
+        { type: 'html' }, // Genera un reporte HTML de cobertura
+        { type: 'text-summary' } // Genera un resumen en texto
       ]
     },
-    reporters: ['progress', 'kjhtml'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
-    restartOnFileChange: true
+    reporters: ['progress', 'kjhtml'], // Progreso y reporter HTML para Jasmine
+    port: 9876, // Puerto por defecto para Karma
+    colors: true, // Habilitar colores en la terminal
+    logLevel: config.LOG_INFO, // Nivel de log INFO
+    autoWatch: true, // Monitorea cambios en los archivos
+    browsers: ['Chrome'], // Usa Chrome como navegador para las pruebas
+    singleRun: false, // No cierra el navegador después de correr las pruebas
+    restartOnFileChange: true // Reinicia las pruebas al cambiar archivos
   });
 };
